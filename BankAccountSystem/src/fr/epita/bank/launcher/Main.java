@@ -8,8 +8,8 @@ package fr.epita.bank.launcher;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
-import fr.epita.bank.datamodel.Account;
 import fr.epita.bank.datamodel.Customer;
 import fr.epita.bank.datamodel.InvestmentAccount;
 import fr.epita.bank.datamodel.SavingsAccount;
@@ -55,8 +55,14 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Welcome to the bank system program");
 	
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Please enter the user name: ");
+		String name = scanner.nextLine();
 		Customer customer1 =  new Customer();
-		customer1.setName("tom");
+
+		customer1.setName(name);
 		System.out.println("the program created a customer with name :" + customer1.getName());
 		
 		InvestmentAccount investmentAccount = new InvestmentAccount();
@@ -73,12 +79,15 @@ public class Main {
 		
 		List<SavingsAccount> savingsAccountList= new ArrayList<>();
 		savingsAccountList.add(savingsAccount);
+		
 		customer1.setSavingsAccounts(savingsAccountList);
 		
 		System.out.println("customer1 content : "+ customer1);
 		
 		
 		System.out.println("End of program");
+		
+		scanner.close();
 	}
 
 }
