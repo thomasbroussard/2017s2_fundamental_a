@@ -64,12 +64,13 @@ public class Main {
 	 *         ${tags}
 	 */
 	public static void main(String[] args) {
+		
+		ConsoleHandler consoleHandler = new ConsoleHandler(System.in, System.out);
+		
 		System.out.println("Welcome to the bank system program");
-
-		Scanner scanner = new Scanner(System.in);
-
 		System.out.println("Please enter the user name: ");
-		String name = scanner.nextLine();
+		String name = consoleHandler.getString();
+		
 		Customer customer1 = new Customer();
 
 		customer1.setName(name);
@@ -77,17 +78,17 @@ public class Main {
 
 		System.out.println("Please enter a balance for the investment account");
 		InvestmentAccount investmentAccount = new InvestmentAccount();
-		Double investmentAccountBalance = ConsoleHandler.getDouble(scanner);
+		Double investmentAccountBalance = consoleHandler.getDouble();
 
 		investmentAccount.setBalance(investmentAccountBalance);
 
 		SavingsAccount savingsAccount = new SavingsAccount();
 		System.out.println("Please enter a balance for the savings account");
-		Double savingsAccountBalance = ConsoleHandler.getDouble(scanner);
+		Double savingsAccountBalance = consoleHandler.getDouble();
 		savingsAccount.setBalance(savingsAccountBalance);
 
 		System.out.println("Please enter an interest rate for the savings account");
-		Double savingsAccountRate = ConsoleHandler.getDouble(scanner);
+		Double savingsAccountRate = consoleHandler.getDouble();
 		savingsAccount.setInterrestRate(savingsAccountRate);
 
 		customer1.setInvestmentAccounts(Arrays.asList(investmentAccount));
@@ -103,8 +104,9 @@ public class Main {
 
 		System.out.println("End of program");
 
-		scanner.close();
+		consoleHandler.close();
 	}
 
+	
 	
 }
