@@ -35,7 +35,11 @@ public class ConsoleHandler {
 	private PrintWriter printWriter;
 	
 	
-	
+	/**
+	 * 
+	 * @param in
+	 * @param out
+	 */
 	public ConsoleHandler(InputStream in, OutputStream out) {
 		this.printWriter = new PrintWriter(out);
 		this.scanner = new Scanner(in);
