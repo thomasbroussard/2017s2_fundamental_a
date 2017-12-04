@@ -7,6 +7,7 @@ package fr.epita.iam.services.dao;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class IdentityFileDAO {
 	
 	private String filePath;
 	
+	private PrintWriter pw;
+	
 	
 	
 	
@@ -47,11 +50,19 @@ public class IdentityFileDAO {
 			file.createNewFile();
 		}
 		
+		this.pw = new PrintWriter(file);
+		
 		
 		
 	}
 
 	public void create(Identity identity) {
+		this.pw.println("------------------");
+		this.pw.println(identity.getUid());
+		this.pw.println(identity.getEmail());
+		this.pw.println(identity.getDisplayName());
+		this.pw.println("------------------");
+		this.pw.flush();
 		
 	}
 	
