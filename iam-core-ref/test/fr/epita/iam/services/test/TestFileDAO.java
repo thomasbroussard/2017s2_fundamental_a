@@ -95,6 +95,7 @@ public class TestFileDAO {
 		final List<Identity> resultList = dao.search(id1);
 		if (resultList.contains(id1)) {
 			System.out.println("success");
+			System.out.println(resultList.get(resultList.indexOf(id1)));
 		} else {
 			System.out.println("failure");
 		}

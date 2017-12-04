@@ -4,6 +4,7 @@
 package fr.epita.iam.services.dao;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -51,8 +52,8 @@ public class IdentityFileDAO {
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
-
-		pw = new PrintWriter(file);
+		final FileOutputStream fos = new FileOutputStream(file, true);
+		pw = new PrintWriter(fos);
 		scanner = new Scanner(file);
 
 	}
@@ -98,7 +99,7 @@ public class IdentityFileDAO {
 	 * <h3>Usage</h3>
 	 * <p>
 	 * It should be used as follows :
-	 * 
+	 *
 	 * <pre>
 	 * <code> ${enclosing_type} sample;
 	 *
@@ -108,7 +109,7 @@ public class IdentityFileDAO {
 	 *</code>
 	 * </pre>
 	 * </p>
-	 * 
+	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
