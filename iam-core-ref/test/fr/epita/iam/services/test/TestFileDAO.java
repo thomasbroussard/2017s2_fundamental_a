@@ -57,13 +57,13 @@ public class TestFileDAO {
 
 	}
 
-	/** 
-	 * <h3>Description</h3>  
+	/**
+	 * <h3>Description</h3>
 	 * <p>This methods allows to ...</p>
 	 *
 	 * <h3>Usage</h3>
 	 * <p>It should be used as follows :
-	 *   
+	 *
 	 * <pre><code> ${enclosing_type} sample;
 	 *
 	 * //...
@@ -71,7 +71,7 @@ public class TestFileDAO {
 	 * sample.${enclosing_method}();
 	 *</code></pre>
 	 * </p>
-	 *  
+	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
@@ -93,10 +93,34 @@ public class TestFileDAO {
 
 		// Then
 		final List<Identity> resultList = dao.search(id1);
-		if (!resultList.isEmpty()) {
-			System.out.println("Success");
+		if (resultList.contains(id1)) {
+			System.out.println("success");
 		} else {
-			// handle error
+			System.out.println("failure");
+		}
+	}
+
+	private static void testCreateUpdateAndSearch() throws IOException {
+		// Given
+		final Identity id1 = new Identity();
+		id1.setEmail("tbr@tbr.com");
+		id1.setUid("123");
+		id1.setDisplayName("Thomas Broussard");
+		System.out.println(id1);
+
+		final IdentityFileDAO dao = new IdentityFileDAO("/tmp/2017s2/identities.txt");
+		dao.create(id1);
+
+		// When
+		id1.setEmail("tbr@epita.com");
+		dao.update(id1);
+
+		// Then
+		final List<Identity> resultList = dao.search(id1);
+		if (resultList.contains(id1)) {
+			System.out.println("success");
+		} else {
+			System.out.println("failure");
 		}
 	}
 
