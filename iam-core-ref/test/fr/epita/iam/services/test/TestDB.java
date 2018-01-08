@@ -1,0 +1,82 @@
+/**
+ * Ce fichier est la propriété de Thomas BROUSSARD
+ * Code application :
+ * Composant :
+ */
+package fr.epita.iam.services.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * <h3>Description</h3>
+ * <p>This class allows to ...</p>
+ *
+ * <h3>Usage</h3>
+ * <p>This class should be used as follows:
+ *   <pre><code>${type_name} instance = new ${type_name}();</code></pre>
+ * </p>
+ *
+ * @since $${version}
+ * @see See also $${link}
+ * @author ${user}
+ *
+ * ${tags}
+ */
+public class TestDB {
+
+	/**
+	 * <h3>Description</h3>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
+	 *
+	 * <h3>Usage</h3>
+	 * <p>
+	 * It should be used as follows :
+	 *
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
+	 *
+	 * //...
+	 *
+	 * sample.${enclosing_method}();
+	 *</code>
+	 * </pre>
+	 * </p>
+	 *
+	 * @since $${version}
+	 * @see Voir aussi $${link}
+	 * @author ${user}
+	 *
+	 *         ${tags}
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		final String url = "jdbc:derby://localhost:1527/iam;create=true";
+		final String password = "root";
+		final String username = "root";
+
+		Class.forName("org.apache.derby.jdbc.ClientDriver");
+
+		final Connection connection = DriverManager.getConnection(url, username, password);
+
+		final PreparedStatement ptst = connection.prepareStatement("select DISPLAY_NAME from IDENTITIES");
+		final ResultSet rs = ptst.executeQuery();
+
+		while (rs.next()) {
+			System.out.println(rs.getString(0));
+		}
+
+		System.out.println("finished");
+		rs.close();
+		ptst.close();
+		connection.close();
+
+	}
+
+}
