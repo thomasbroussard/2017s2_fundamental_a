@@ -61,13 +61,26 @@ public class TestDB {
 
 		// differenceBetweenPreparedStatementAndStatement();
 
+		// Given
 		final Connection connection = getConnection();
 		final PreparedStatement pstmt = connection.prepareStatement("INSERT INTO IDENTITIES(UID, EMAIL, DISPLAY_NAME) VALUES (?, ?, ?)");
 		pstmt.setString(1, "4567");
 		pstmt.setString(2, "cserr@cserr.com");
 		pstmt.setString(3, "Clément");
 
+		// When
 		pstmt.execute();
+
+		// Then
+		final PreparedStatement verificationStatement = connection
+				.prepareStatement("SELECT DISPLAY_NAME FROM IDENTITIES WHERE DISPLAY_NAME='Clément'");
+		final ResultSet resultSet = verificationStatement.executeQuery();
+		resultSet.next();
+		if (resultSet.getString(1).equals("Clément")) {
+			System.out.println("Success");
+		} else {
+			System.out.println("Failure");
+		}
 
 		connection.close();
 	}
@@ -135,7 +148,7 @@ public class TestDB {
 		final ResultSet rs = ptst.executeQuery();
 
 		while (rs.next()) {
-			System.out.println(rs.getString(0));
+			System.out.println(rs.getString(1));
 		}
 
 		System.out.println("finished");

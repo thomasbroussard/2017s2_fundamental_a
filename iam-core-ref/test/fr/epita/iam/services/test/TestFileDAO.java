@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.services.dao.IdentityDAO;
 import fr.epita.iam.services.dao.IdentityFileDAO;
 
 /**
@@ -86,7 +87,7 @@ public class TestFileDAO {
 		id1.setDisplayName("Thomas Broussard");
 		System.out.println(id1);
 
-		final IdentityFileDAO dao = new IdentityFileDAO("/tmp/2017s2/identities.txt");
+		final IdentityDAO dao = new IdentityFileDAO("/tmp/2017s2/identities.txt");
 
 		// When
 		dao.create(id1);

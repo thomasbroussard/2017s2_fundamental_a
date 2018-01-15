@@ -1,3 +1,6 @@
+# TODO (2018/01/15)
+- complete the search() and the create() methods from IdentityJDBCDAO.
+
 # TODO (2018/01/08)
 - adapt the testDB to take user input and to write concretely in the database.
 

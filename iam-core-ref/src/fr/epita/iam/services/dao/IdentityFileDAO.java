@@ -34,7 +34,7 @@ import fr.epita.iam.datamodel.Identity;
  *
  *         ${tags}
  */
-public class IdentityFileDAO {
+public class IdentityFileDAO implements IdentityDAO {
 
 	private final String filePath;
 
@@ -58,6 +58,7 @@ public class IdentityFileDAO {
 
 	}
 
+	@Override
 	public void create(Identity identity) {
 		pw.println("------------------");
 		pw.println(identity.getUid());
@@ -68,6 +69,7 @@ public class IdentityFileDAO {
 
 	}
 
+	@Override
 	public List<Identity> search(Identity criteria) {
 		final List<Identity> results = new ArrayList<>();
 
@@ -121,10 +123,12 @@ public class IdentityFileDAO {
 				|| identity.getUid().contains(criteria.getUid());
 	}
 
+	@Override
 	public void update(Identity identity) {
 		// TODO
 	}
 
+	@Override
 	public void delete(Identity identity) {
 		// TODO
 	}
