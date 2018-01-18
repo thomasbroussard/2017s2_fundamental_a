@@ -1,3 +1,7 @@
+# TODO (2018/01/18)
+- make the IdentityJDBCDAO#getConnection() variable so that it can support more than the default database
+
+
 # TODO (2018/01/15)
 - complete the search() and the create() methods from IdentityJDBCDAO.
 

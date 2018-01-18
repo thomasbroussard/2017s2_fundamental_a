@@ -6,7 +6,9 @@ package fr.epita.iam.services.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
@@ -68,7 +70,43 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	 */
 	@Override
 	public List<Identity> search(Identity criteria) {
-		return null;
+		final List<Identity> results = new ArrayList<>();
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			final String sqlString = "SELECT DISPLAY_NAME, EMAIL, UID FROM IDENTITIES " + "WHERE (? IS NULL OR DISPLAY_NAME LIKE ?) "
+					+ "AND (? IS NULL OR EMAIL LIKE ?) " + "AND (? IS NULL OR UID = ?)";
+			final PreparedStatement preparedStatement = connection.prepareStatement(
+					sqlString);
+
+			preparedStatement.setString(1, criteria.getDisplayName());
+			preparedStatement.setString(2, criteria.getDisplayName() + "%");
+			preparedStatement.setString(3, criteria.getEmail());
+			preparedStatement.setString(4, criteria.getEmail() + "%");
+			preparedStatement.setString(5, criteria.getUid());
+			preparedStatement.setString(6, criteria.getUid());
+			final ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				final Identity currentIdentity = new Identity();
+				// How to select the right index?
+				currentIdentity.setDisplayName(rs.getString("DISPLAY_NAME"));
+				currentIdentity.setEmail(rs.getString("EMAIL"));
+				currentIdentity.setUid(rs.getString("UID"));
+
+				results.add(currentIdentity);
+			}
+			rs.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+			} catch (final SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return results;
 	}
 
 	/*

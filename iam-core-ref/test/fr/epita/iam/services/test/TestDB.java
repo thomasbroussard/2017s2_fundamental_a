@@ -1,7 +1,5 @@
 /**
- * Ce fichier est la propriété de Thomas BROUSSARD
- * Code application :
- * Composant :
+ * Ce fichier est la propriété de Thomas BROUSSARD Code application : Composant :
  */
 package fr.epita.iam.services.test;
 
@@ -10,21 +8,32 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.services.dao.IdentityDAO;
+import fr.epita.iam.services.dao.IdentityJDBCDAO;
 
 /**
  * <h3>Description</h3>
- * <p>This class allows to ...</p>
+ * <p>
+ * This class allows to ...
+ * </p>
  *
  * <h3>Usage</h3>
- * <p>This class should be used as follows:
- *   <pre><code>${type_name} instance = new ${type_name}();</code></pre>
+ * <p>
+ * This class should be used as follows:
+ *
+ * <pre>
+ * <code>${type_name} instance = new ${type_name}();</code>
+ * </pre>
  * </p>
  *
  * @since $${version}
  * @see See also $${link}
  * @author ${user}
  *
- * ${tags}
+ *         ${tags}
  */
 public class TestDB {
 
@@ -61,6 +70,65 @@ public class TestDB {
 
 		// differenceBetweenPreparedStatementAndStatement();
 
+		// rawSelect();
+
+		// given
+		final Identity identity1 = new Identity("Clément Serrano", "1234", "cserr@cserr.fr");
+		final Identity identity2 = new Identity("Quentin Decayeux", "4567", "qdeca@qdeca.fr");
+
+		final IdentityDAO dao = new IdentityJDBCDAO();
+
+		dao.create(identity1);
+		dao.create(identity2);
+
+		// when
+		final List<Identity> resultList = dao.search(new Identity(null, "1234", null));
+
+
+		// then
+		System.out.println("result list : ");
+		System.out.println(resultList);
+		if (resultList != null && !resultList.isEmpty()) {
+			System.out.println("more than one identity");
+			if (resultList.get(0).getUid().equals("1234")) {
+				// then
+				System.out.println("success");
+			} else {
+				System.out.println("failure");
+			}
+		} else {
+			System.out.println("failure");
+		}
+
+	}
+
+	/**
+	 * <h3>Description</h3>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
+	 *
+	 * <h3>Usage</h3>
+	 * <p>
+	 * It should be used as follows :
+	 *
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
+	 *
+	 * //...
+	 *
+	 * sample.${enclosing_method}();
+	 *</code>
+	 * </pre>
+	 * </p>
+	 *
+	 * @since $${version}
+	 * @see Voir aussi $${link}
+	 * @author ${user}
+	 *
+	 *         ${tags}
+	 */
+	private static void rawSelect() throws ClassNotFoundException, SQLException {
 		// Given
 		final Connection connection = getConnection();
 		final PreparedStatement pstmt = connection.prepareStatement("INSERT INTO IDENTITIES(UID, EMAIL, DISPLAY_NAME) VALUES (?, ?, ?)");
@@ -122,24 +190,29 @@ public class TestDB {
 
 	/**
 	 * <h3>Description</h3>
-	 * <p>This methods allows to ...</p>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
 	 *
 	 * <h3>Usage</h3>
-	 * <p>It should be used as follows :
+	 * <p>
+	 * It should be used as follows :
 	 *
-	 * <pre><code> ${enclosing_type} sample;
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
 	 *
 	 * //...
 	 *
 	 * sample.${enclosing_method}();
-	 *</code></pre>
+	 *</code>
+	 * </pre>
 	 * </p>
 	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
 	 *
-	 * ${tags}
+	 *         ${tags}
 	 */
 	private static void testSelectQuery() throws ClassNotFoundException, SQLException {
 		final Connection connection = getConnection();
@@ -159,24 +232,29 @@ public class TestDB {
 
 	/**
 	 * <h3>Description</h3>
-	 * <p>This methods allows to ...</p>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
 	 *
 	 * <h3>Usage</h3>
-	 * <p>It should be used as follows :
+	 * <p>
+	 * It should be used as follows :
 	 *
-	 * <pre><code> ${enclosing_type} sample;
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
 	 *
 	 * //...
 	 *
 	 * sample.${enclosing_method}();
-	 *</code></pre>
+	 *</code>
+	 * </pre>
 	 * </p>
 	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
 	 *
-	 * ${tags}
+	 *         ${tags}
 	 */
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {
 		final String url = "jdbc:derby://localhost:1527/iam;create=true";
