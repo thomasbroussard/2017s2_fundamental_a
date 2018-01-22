@@ -36,6 +36,9 @@ public class Logger {
 	private static final String logPath = "/tmp/application.log";
 	private static PrintWriter pw;
 
+	private static final String ERROR = "ERROR";
+	private static final String INFO = "INFO";
+
 	static {
 		try {
 			pw = new PrintWriter(new FileOutputStream(new File(logPath), true));
@@ -52,7 +55,41 @@ public class Logger {
 	}
 
 	public void error(String message) {
-		final String completeMessage = getTimeStamp() + " - " + cls.getCanonicalName() + " " + message;
+		printMessage(message, ERROR);
+	}
+
+	public void info(String message) {
+		printMessage(message, INFO);
+	}
+
+	/**
+	 * <h3>Description</h3>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
+	 *
+	 * <h3>Usage</h3>
+	 * <p>
+	 * It should be used as follows :
+	 * 
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
+	 *
+	 * //...
+	 *
+	 * sample.${enclosing_method}();
+	 *</code>
+	 * </pre>
+	 * </p>
+	 * 
+	 * @since $${version}
+	 * @see Voir aussi $${link}
+	 * @author ${user}
+	 *
+	 *         ${tags}
+	 */
+	private void printMessage(String message, String Level) {
+		final String completeMessage = getTimeStamp() + " - " + Level + " - " + cls.getCanonicalName() + " " + message;
 		pw.println(completeMessage);
 		pw.flush();
 	}
