@@ -43,7 +43,7 @@ public class Main {
 	 *
 	 * <pre>
 	 * <code>
-	 * java -jar ${jarName} ${filePathToConfiguration}
+	 * java -Dconf=${configLocation} -jar ${jarName}
 	 *</code>
 	 * </pre>
 	 * </p>

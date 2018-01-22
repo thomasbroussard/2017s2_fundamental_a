@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.services.configuration.ConfigurationService;
 
 /**
  * <h3>Description</h3>
@@ -35,6 +36,13 @@ import fr.epita.iam.datamodel.Identity;
  *         ${tags}
  */
 public class IdentityJDBCDAO implements IdentityDAO {
+
+	/**
+	 *
+	 */
+	private static final String DB_HOST = "db.host";
+	private static final String DB_PWD = "db.pwd";
+	private static final String DB_USER = "db.user";
 
 	/*
 	 * (non-Javadoc)
@@ -129,9 +137,12 @@ public class IdentityJDBCDAO implements IdentityDAO {
 
 	private static Connection getConnection() throws ClassNotFoundException, SQLException {
 		// TODO make this variable through configuration
-		final String url = "jdbc:derby://localhost:1527/iam;create=true";
-		final String password = "root";
-		final String username = "root";
+
+		final ConfigurationService confService = ConfigurationService.getInstance();
+
+		final String url = confService.getConfigurationValue(DB_HOST);
+		final String password = confService.getConfigurationValue(DB_PWD);
+		final String username = confService.getConfigurationValue(DB_USER);
 
 		Class.forName("org.apache.derby.jdbc.ClientDriver");
 

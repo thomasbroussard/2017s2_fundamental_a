@@ -29,7 +29,9 @@ public class ConfigurationService {
 
 	private Properties properties;
 
-	public ConfigurationService(String filePathToConfiguration) {
+	private static ConfigurationService instance;
+
+	private ConfigurationService(String filePathToConfiguration) {
 		try {
 			properties = new Properties();
 			properties.load(new FileInputStream(new File(filePathToConfiguration)));
@@ -37,6 +39,13 @@ public class ConfigurationService {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public static ConfigurationService getInstance() {
+		if (instance == null) {
+			instance = new ConfigurationService(System.getProperty("conf"));
+		}
+		return instance;
 	}
 
 	public String getConfigurationValue(String propertyKey) {

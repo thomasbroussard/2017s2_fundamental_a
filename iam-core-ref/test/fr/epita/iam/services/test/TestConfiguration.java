@@ -41,7 +41,7 @@ public class TestConfiguration {
 		}
 
 		// When
-		final ConfigurationService configService = new ConfigurationService(pathname);
+		final ConfigurationService configService = ConfigurationService.getInstance();
 		final String dbHost = configService.getConfigurationValue("db.host");
 
 		// Then
@@ -84,7 +84,7 @@ public class TestConfiguration {
 		}
 
 		// When
-		final ConfigurationService configService = new ConfigurationService(filePath);
+		final ConfigurationService configService = ConfigurationService.getInstance();
 		final String dbHost = configService.getConfigurationValue("db.host");
 
 		// Then
