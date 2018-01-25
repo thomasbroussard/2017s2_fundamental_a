@@ -8,10 +8,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.IdentityCreationException;
+import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.services.dao.IdentityDAO;
 import fr.epita.iam.services.dao.IdentityJDBCDAO;
 import fr.epita.logger.Logger;
@@ -91,7 +93,13 @@ public class TestDB {
 			System.out.println(e.getMessage());
 		}
 		// when
-		final List<Identity> resultList = dao.search(new Identity(null, "1234", null));
+		List<Identity> resultList = new ArrayList<>();
+		try {
+			resultList = dao.search(new Identity(null, "1234", null));
+		} catch (final IdentitySearchException e) {
+			LOGGER.error("Error while searching identity", e);
+			System.out.println(e.getMessage());
+		}
 
 		// then
 		System.out.println("result list : ");

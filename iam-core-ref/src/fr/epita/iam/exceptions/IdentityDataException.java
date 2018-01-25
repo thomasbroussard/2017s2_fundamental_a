@@ -22,19 +22,13 @@ import fr.epita.iam.datamodel.Identity;
  *
  * ${tags}
  */
-public class IdentityCreationException extends IdentityDataException {
+public class IdentityDataException extends Exception {
 
-	/**
-	 * @param e
-	 * @param identity
-	 */
-	public IdentityCreationException(Exception e, Identity identity) {
-		super(e, identity);
+	protected final Identity faultyIdentity;
+
+
+	public IdentityDataException(Exception cause, Identity faultyIdentity) {
+		initCause(cause);
+		this.faultyIdentity = faultyIdentity;
 	}
-
-	@Override
-	public String getMessage() {
-		return "A problem occurred while creating that Identity : " + faultyIdentity;
-	}
-
 }

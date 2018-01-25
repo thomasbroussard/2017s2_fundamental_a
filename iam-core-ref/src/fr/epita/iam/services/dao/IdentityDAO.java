@@ -9,6 +9,7 @@ import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.IdentityCreationException;
+import fr.epita.iam.exceptions.IdentitySearchException;
 
 /**
  * <h3>Description</h3>
@@ -31,7 +32,7 @@ public interface IdentityDAO {
 
 	public void create(Identity identity) throws IdentityCreationException;
 
-	public List<Identity> search(Identity criteria);
+	public List<Identity> search(Identity criteria) throws IdentitySearchException;
 
 	public void update(Identity identity);
 

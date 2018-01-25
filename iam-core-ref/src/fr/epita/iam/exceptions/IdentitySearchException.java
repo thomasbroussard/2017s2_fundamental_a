@@ -22,19 +22,28 @@ import fr.epita.iam.datamodel.Identity;
  *
  * ${tags}
  */
-public class IdentityCreationException extends IdentityDataException {
+public class IdentitySearchException extends IdentityDataException {
 
 	/**
-	 * @param e
-	 * @param identity
+	 * @param cause
+	 * @param faultyIdentity
 	 */
-	public IdentityCreationException(Exception e, Identity identity) {
-		super(e, identity);
+	public IdentitySearchException(Exception cause, Identity faultyIdentity) {
+		super(cause, faultyIdentity);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Throwable#getMessage()
+	 */
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	@Override
 	public String getMessage() {
-		return "A problem occurred while creating that Identity : " + faultyIdentity;
+		return "a problem occured while searching identities with that criteria : " + faultyIdentity;
 	}
-
 }

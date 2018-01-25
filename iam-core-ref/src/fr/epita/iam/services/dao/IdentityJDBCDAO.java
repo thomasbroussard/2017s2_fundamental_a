@@ -13,6 +13,7 @@ import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.IdentityCreationException;
+import fr.epita.iam.exceptions.IdentitySearchException;
 import fr.epita.iam.services.configuration.ConfigurationService;
 import fr.epita.logger.Logger;
 
@@ -86,7 +87,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	 * @see fr.epita.iam.services.dao.IdentityDAO#search(fr.epita.iam.datamodel.Identity)
 	 */
 	@Override
-	public List<Identity> search(Identity criteria) {
+	public List<Identity> search(Identity criteria) throws IdentitySearchException {
 
 		final List<Identity> results = new ArrayList<>();
 		Connection connection = null;
@@ -115,7 +116,8 @@ public class IdentityJDBCDAO implements IdentityDAO {
 			}
 			rs.close();
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			LOGGER.error("error while performing search", e);
+			throw new IdentitySearchException(e, criteria);
 		} finally {
 			try {
 				connection.close();
