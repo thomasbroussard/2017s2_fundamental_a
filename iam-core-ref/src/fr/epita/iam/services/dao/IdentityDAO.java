@@ -8,6 +8,7 @@ package fr.epita.iam.services.dao;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.IdentityCreationException;
 
 /**
  * <h3>Description</h3>
@@ -28,7 +29,7 @@ public interface IdentityDAO {
 
 	public static final Integer number = 0;
 
-	public void create(Identity identity);
+	public void create(Identity identity) throws IdentityCreationException;
 
 	public List<Identity> search(Identity criteria);
 

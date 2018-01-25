@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.services.configuration.ConfigurationService;
 import fr.epita.logger.Logger;
 
@@ -52,7 +53,7 @@ public class IdentityJDBCDAO implements IdentityDAO {
 	 * @see fr.epita.iam.services.dao.IdentityDAO#create(fr.epita.iam.datamodel.Identity)
 	 */
 	@Override
-	public void create(Identity identity) {
+	public void create(Identity identity) throws IdentityCreationException {
 
 		LOGGER.info("creating that identity" + identity);
 		Connection connection = null;
@@ -67,6 +68,8 @@ public class IdentityJDBCDAO implements IdentityDAO {
 		} catch (final Exception e) {
 			// TODO: handle exception
 			LOGGER.error("error while creating the identity " + identity + "got that error " + e.getMessage());
+			throw new IdentityCreationException(e, identity);
+
 		} finally {
 			if (connection != null) {
 				try {

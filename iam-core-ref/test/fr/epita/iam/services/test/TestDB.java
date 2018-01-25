@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.services.dao.IdentityDAO;
 import fr.epita.iam.services.dao.IdentityJDBCDAO;
+import fr.epita.logger.Logger;
 
 /**
  * <h3>Description</h3>
@@ -36,6 +38,8 @@ import fr.epita.iam.services.dao.IdentityJDBCDAO;
  *         ${tags}
  */
 public class TestDB {
+
+	private static final Logger LOGGER = new Logger(TestDB.class);
 
 	/**
 	 * <h3>Description</h3>
@@ -64,8 +68,9 @@ public class TestDB {
 	 *         ${tags}
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
+	 * @throws IdentityCreationException
 	 */
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) {
 		// testSelectQuery();
 
 		// differenceBetweenPreparedStatementAndStatement();
@@ -78,12 +83,15 @@ public class TestDB {
 
 		final IdentityDAO dao = new IdentityJDBCDAO();
 
-		dao.create(identity1);
-		dao.create(identity2);
-
+		try {
+			dao.create(identity1);
+			dao.create(identity2);
+		} catch (final IdentityCreationException e) {
+			LOGGER.error("Error while creating identity", e);
+			System.out.println(e.getMessage());
+		}
 		// when
 		final List<Identity> resultList = dao.search(new Identity(null, "1234", null));
-
 
 		// then
 		System.out.println("result list : ");

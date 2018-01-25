@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.IdentityCreationException;
 import fr.epita.iam.services.dao.IdentityDAO;
 import fr.epita.iam.services.dao.IdentityFileDAO;
 
@@ -50,8 +51,9 @@ public class TestFileDAO {
 	 *
 	 * ${tags}
 	 * @throws IOException
+	 * @throws IdentityCreationException
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, IdentityCreationException {
 
 		testCreateAndSearch();
 
@@ -60,26 +62,32 @@ public class TestFileDAO {
 
 	/**
 	 * <h3>Description</h3>
-	 * <p>This methods allows to ...</p>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
 	 *
 	 * <h3>Usage</h3>
-	 * <p>It should be used as follows :
+	 * <p>
+	 * It should be used as follows :
 	 *
-	 * <pre><code> ${enclosing_type} sample;
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
 	 *
 	 * //...
 	 *
 	 * sample.${enclosing_method}();
-	 *</code></pre>
+	 *</code>
+	 * </pre>
 	 * </p>
 	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
 	 *
-	 * ${tags}
+	 *         ${tags}
+	 * @throws IdentityCreationException
 	 */
-	private static void testCreateAndSearch() throws IOException {
+	private static void testCreateAndSearch() throws IOException, IdentityCreationException {
 		// Given
 		final Identity id1 = new Identity();
 		id1.setEmail("tbr@tbr.com");

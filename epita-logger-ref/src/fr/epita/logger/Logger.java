@@ -71,7 +71,7 @@ public class Logger {
 	 * <h3>Usage</h3>
 	 * <p>
 	 * It should be used as follows :
-	 * 
+	 *
 	 * <pre>
 	 * <code> ${enclosing_type} sample;
 	 *
@@ -81,7 +81,7 @@ public class Logger {
 	 *</code>
 	 * </pre>
 	 * </p>
-	 * 
+	 *
 	 * @since $${version}
 	 * @see Voir aussi $${link}
 	 * @author ${user}
@@ -99,6 +99,38 @@ public class Logger {
 
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 		return sdf.format(date);
+	}
+
+	/**
+	 * <h3>Description</h3>
+	 * <p>
+	 * This methods allows to ...
+	 * </p>
+	 *
+	 * <h3>Usage</h3>
+	 * <p>
+	 * It should be used as follows :
+	 * 
+	 * <pre>
+	 * <code> ${enclosing_type} sample;
+	 *
+	 * //...
+	 *
+	 * sample.${enclosing_method}();
+	 *</code>
+	 * </pre>
+	 * </p>
+	 * 
+	 * @since $${version}
+	 * @see Voir aussi $${link}
+	 * @author ${user}
+	 *
+	 *         ${tags}
+	 */
+	public void error(String message, Exception e) {
+		printMessage(message, ERROR);
+		e.printStackTrace(pw);
+		pw.flush();
 	}
 
 }
