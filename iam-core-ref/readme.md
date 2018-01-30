@@ -1,3 +1,7 @@
+# TODO (2018/01/30)
+Complete the IdentityXMLDAO in order to make it write the proper content (it is wrong now).
+
+
 # TODO (2018/01/18)
 - make the IdentityJDBCDAO#getConnection() variable so that it can support more than the default database
 - complete the logger methods to be able to output messages, the messages types are :

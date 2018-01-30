@@ -5,13 +5,22 @@ package fr.epita.iam.services;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -96,11 +105,11 @@ public class IdentityXMLDAO implements IdentityDAO {
 	public void create(Identity identity) throws IdentityCreationException {
 		final Element root = document.getDocumentElement();
 		final Element identityElement = getNewIdentityElt();
-		getNewPropertyElmt("displayName", identity.getDisplayName());
-		getNewPropertyElmt("uid", identity.getUid());
-		getNewPropertyElmt("email", identity.getEmail());
+		identityElement.appendChild(getNewPropertyElmt("displayName", identity.getDisplayName()));
+		identityElement.appendChild(getNewPropertyElmt("uid", identity.getUid()));
+		identityElement.appendChild(getNewPropertyElmt("email", identity.getEmail()));
 		root.appendChild(identityElement);
-
+		writeToFile();
 	}
 
 	/**
@@ -129,11 +138,12 @@ public class IdentityXMLDAO implements IdentityDAO {
 	 *
 	 *         ${tags}
 	 */
-	private void getNewPropertyElmt(String propertyName, String propertyValue) {
+	private Element getNewPropertyElmt(String propertyName, String propertyValue) {
 		final Element identityProperty = getNewPropertyElt();
 		identityProperty.setNodeValue(propertyName);
 		identityProperty.setAttribute(propertyName, propertyValue);
 		identityProperty.setTextContent(propertyValue);
+		return identityProperty;
 	}
 
 	private Element getNewIdentityElt() {
@@ -189,6 +199,38 @@ public class IdentityXMLDAO implements IdentityDAO {
 		}
 		return identities;
 
+	}
+
+	private String documentToString() {
+		String output = "";
+		try {
+			final TransformerFactory tf = TransformerFactory.newInstance();
+			final Transformer transformer = tf.newTransformer();
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			final StringWriter writer = new StringWriter();
+			transformer.transform(new DOMSource(document), new StreamResult(writer));
+			output = writer.getBuffer().toString().replaceAll("\n|\r", "");
+		} catch (final Exception e) {
+			LOGGER.error("got a problem while transforming document to string", e);
+		}
+		return output;
+	}
+
+	private void writeToFile() {
+		final String xmlFilePath = ConfigurationService.getInstance().getConfigurationValue("xml.file.path");
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(new FileOutputStream(xmlFilePath), true);
+			writer.println(documentToString());
+
+		} catch (final FileNotFoundException e) {
+
+			LOGGER.error("An error occured", e);
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
 	}
 
 	/*
