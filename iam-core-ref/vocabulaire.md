@@ -1,3 +1,32 @@
+# Liste de mots du 01/02/2018
+for --> Pour
+for each --> Pour tout / Pour chaque
+while --> Tant que
+do while / until --> Jusqu'à
+try / catch / finally --> essayer / attraper / finalement
+source --> source
+author --> auteur
+refactor --> refactor / réorganiser
+debug --> debug / deboguer
+run --> exécuter
+step --> pas / étape
+window --> fenêtre
+form --> formulaire
+button --> bouton
+path --> chemin
+undo / redo --> annuler / recommencer
+translation --> traduction
+cast --> conversion (de type)
+directory / folder --> répertoire / dossier
+file --> fichier
+import / export --> importer / exporter
+(re)start --> (re)démarrer
+shutdown --> arrêter
+goodbye? --> aurevoir!
+
+  
+
+
 # Liste de mots du 25/01/2018
 English --> Français
 * Creation --> Création

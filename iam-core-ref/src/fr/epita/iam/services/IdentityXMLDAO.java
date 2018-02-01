@@ -64,6 +64,20 @@ import fr.epita.logger.Logger;
  */
 public class IdentityXMLDAO implements IdentityDAO {
 
+	/**
+	 *
+	 */
+	private static final String PROPERTY_NAME_DISPLAY_NAME_TEXT = "./property[@name='displayName']/text()";
+	/**
+	 *
+	 */
+	private static final String PROPERTY_NAME_UID_TEXT = "./property[@name='uid']/text()";
+	/**
+	 *
+	 */
+	private static final String PROPERTY_NAME_EMAIL_TEXT = "./property[@name='email']/text()";
+	private static final XPathFactory xpathFactory = XPathFactory.newInstance();
+	private static final XPath Xpath = xpathFactory.newXPath();
 	private static final Logger LOGGER = new Logger(IdentityXMLDAO.class);
 
 	/**
@@ -258,6 +272,38 @@ public class IdentityXMLDAO implements IdentityDAO {
 
 	}
 
+	private List<Element> evaluateXpathAsList(Node relativeParent, String xpath) {
+		final List<Element> elements = new ArrayList<>();
+		XPathExpression xPathExpression;
+		try {
+			xPathExpression = Xpath.compile(xpath);
+			final NodeList results = (NodeList) xPathExpression.evaluate(relativeParent, XPathConstants.NODESET);
+			final int length = results.getLength();
+			for (int i = 0; i < length; i++) {
+				final Node item = results.item(i);
+				if (item instanceof Element) {
+					elements.add((Element) item);
+				}
+			}
+		} catch (final XPathExpressionException e) {
+			// FIXME Use a logger to trace the following error
+			// LOGGER.error("An error occured", ${exception_var})
+		}
+		return elements;
+	}
+
+	private String evaluateXpathAsString(Node relativeParent, String xpath) {
+		XPathExpression xPathExpression;
+		try {
+			xPathExpression = Xpath.compile(xpath);
+			return (String) xPathExpression.evaluate(relativeParent, XPathConstants.STRING);
+
+		} catch (final XPathExpressionException e) {
+			// FIXME Use a logger to trace the following error
+			// LOGGER.error("An error occured", ${exception_var})
+		}
+		return "";
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see fr.epita.iam.services.dao.IdentityDAO#search(fr.epita.iam.datamodel.Identity)
@@ -267,30 +313,16 @@ public class IdentityXMLDAO implements IdentityDAO {
 		final List<Identity> identities = new ArrayList<>();
 		final String expression = "/identities/identity[starts-with(./property[@name='displayName']/text() , '" + criteria.getDisplayName()
 		+ "')]";
-		final String expressionDisplayName = "./property[@name='displayName']/text()";
-		final String expressionUid = "./property[@name='uid']/text()";
-		final String expressionEmail = "./property[@name='email']/text()";
-		try {
-			final XPathFactory xpathFactory = XPathFactory.newInstance();
-			final XPath Xpath = xpathFactory.newXPath();
-			final XPathExpression xPathExpression = Xpath.compile(expression);
-			final NodeList results = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
-
-			final int length = results.getLength();
-			for (int i = 0; i < length; i++) {
-				final Node item = results.item(i);
-				final Identity identity = new Identity();
-				identity.setDisplayName(
-						(String) xpathFactory.newXPath().compile(expressionDisplayName).evaluate(item, XPathConstants.STRING));
-				identity.setEmail((String) xpathFactory.newXPath().compile(expressionEmail).evaluate(item, XPathConstants.STRING));
-				identity.setUid((String) xpathFactory.newXPath().compile(expressionUid).evaluate(item, XPathConstants.STRING));
-				identities.add(identity);
-			}
-
-		} catch (final XPathExpressionException e) {
-
-			LOGGER.error("An error occured", e);
+		final List<Element> identitiesAsElement = evaluateXpathAsList(document, expression);
+		for (final Element element : identitiesAsElement) {
+			final Identity identity = new Identity();
+			identity.setDisplayName(evaluateXpathAsString(element, PROPERTY_NAME_DISPLAY_NAME_TEXT));
+			identity.setEmail(evaluateXpathAsString(element, PROPERTY_NAME_EMAIL_TEXT));
+			identity.setUid(evaluateXpathAsString(element, PROPERTY_NAME_UID_TEXT));
+			identities.add(identity);
 		}
+
+
 
 		return identities;
 	}
