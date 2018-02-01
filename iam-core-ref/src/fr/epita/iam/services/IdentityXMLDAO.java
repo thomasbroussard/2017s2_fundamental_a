@@ -145,8 +145,7 @@ public class IdentityXMLDAO implements IdentityDAO {
 	 */
 	private Element getNewPropertyElmt(String propertyName, String propertyValue) {
 		final Element identityProperty = getNewPropertyElt();
-		identityProperty.setNodeValue(propertyName);
-		identityProperty.setAttribute(propertyName, propertyValue);
+		identityProperty.setAttribute("name", propertyName);
 		identityProperty.setTextContent(propertyValue);
 		return identityProperty;
 	}
@@ -266,7 +265,8 @@ public class IdentityXMLDAO implements IdentityDAO {
 	@Override
 	public List<Identity> search(Identity criteria) throws IdentitySearchException {
 		final List<Identity> identities = new ArrayList<>();
-		final String expression = "/identities/identity[./property[@name='displayName']/text() = '" + criteria.getDisplayName() + "']";
+		final String expression = "/identities/identity[starts-with(./property[@name='displayName']/text() , '" + criteria.getDisplayName()
+		+ "')]";
 		final String expressionDisplayName = "./property[@name='displayName']/text()";
 		final String expressionUid = "./property[@name='uid']/text()";
 		final String expressionEmail = "./property[@name='email']/text()";
