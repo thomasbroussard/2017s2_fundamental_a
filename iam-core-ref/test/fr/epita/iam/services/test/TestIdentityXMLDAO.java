@@ -66,7 +66,7 @@ public class TestIdentityXMLDAO {
 		dao.create(new Identity("Thomas Broussard", "1234", "tbr@tbr.com"));
 
 		// then
-		final List<Identity> list = dao.search(new Identity("Thomas", null, null));
+		final List<Identity> list = dao.search(new Identity("Thomas Broussard", null, null));
 
 		if (list.isEmpty()) {
 			System.out.println("failure");

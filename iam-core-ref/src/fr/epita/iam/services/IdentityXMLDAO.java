@@ -21,6 +21,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -158,48 +163,49 @@ public class IdentityXMLDAO implements IdentityDAO {
 		return document.createElement(PROPERTY);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see fr.epita.iam.services.dao.IdentityDAO#search(fr.epita.iam.datamodel.Identity)
-	 */
-	@Override
-	public List<Identity> search(Identity criteria) throws IdentitySearchException {
-		final List<Identity> identities = new ArrayList<>();
-		final NodeList list = document.getElementsByTagName(IDENTITY);
+	// /*
+	// * (non-Javadoc)
+	// * @see fr.epita.iam.services.dao.IdentityDAO#search(fr.epita.iam.datamodel.Identity)
+	// */
+	// @Override
+	// public List<Identity> search(Identity criteria) throws IdentitySearchException {
+	// final List<Identity> identities = new ArrayList<>();
+	// final NodeList list = document.getElementsByTagName(IDENTITY);
+	//
+	// final int length = list.getLength();
+	// for (int i = 0; i < length; i++) {
+	// final Node identityNode = list.item(i);
+	// if (identityNode instanceof Element) {
+	// final Element identityElement = (Element) list.item(i);
+	// final Identity identity = new Identity();
+	// final NodeList propertiesList = identityElement.getElementsByTagName(PROPERTY);
+	// final int propertiesLength = propertiesList.getLength();
+	// for (int j = 0; j < propertiesLength; j++) {
+	// final Node propertyNode = propertiesList.item(j);
+	// if (propertyNode instanceof Element) {
+	// final Element propertyElement = (Element) propertyNode;
+	// final String attribute = propertyElement.getAttribute("name");
+	// switch (attribute) {
+	// case "displayName":
+	// identity.setDisplayName(propertyElement.getTextContent());
+	// break;
+	// case "email":
+	// identity.setEmail(propertyElement.getTextContent());
+	// break;
+	// case "uid":
+	// identity.setUid(propertyElement.getTextContent());
+	// break;
+	//
+	// }
+	// }
+	// }
+	// identities.add(identity);
+	// }
+	// }
+	// return identities;
+	//
+	// }
 
-		final int length = list.getLength();
-		for (int i = 0; i < length; i++) {
-			final Node identityNode = list.item(i);
-			if (identityNode instanceof Element) {
-				final Element identityElement = (Element) list.item(i);
-				final Identity identity = new Identity();
-				final NodeList propertiesList = identityElement.getElementsByTagName(PROPERTY);
-				final int propertiesLength = propertiesList.getLength();
-				for (int j = 0; j < propertiesLength; j++) {
-					final Node propertyNode = propertiesList.item(j);
-					if (propertyNode instanceof Element) {
-						final Element propertyElement = (Element) propertyNode;
-						final String attribute = propertyElement.getAttribute("name");
-						switch (attribute) {
-						case "displayName":
-							identity.setDisplayName(propertyElement.getTextContent());
-							break;
-						case "email":
-							identity.setEmail(propertyElement.getTextContent());
-							break;
-						case "uid":
-							identity.setUid(propertyElement.getTextContent());
-							break;
-
-						}
-					}
-				}
-				identities.add(identity);
-			}
-		}
-		return identities;
-
-	}
 
 	private String documentToString() {
 		String output = "";
@@ -251,6 +257,42 @@ public class IdentityXMLDAO implements IdentityDAO {
 	public void delete(Identity identity) {
 		// TODO Complete this stub or remove that comment line
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see fr.epita.iam.services.dao.IdentityDAO#search(fr.epita.iam.datamodel.Identity)
+	 */
+	@Override
+	public List<Identity> search(Identity criteria) throws IdentitySearchException {
+		final List<Identity> identities = new ArrayList<>();
+		final String expression = "/identities/identity[./property[@name='displayName']/text() = '" + criteria.getDisplayName() + "']";
+		final String expressionDisplayName = "./property[@name='displayName']/text()";
+		final String expressionUid = "./property[@name='uid']/text()";
+		final String expressionEmail = "./property[@name='email']/text()";
+		try {
+			final XPathFactory xpathFactory = XPathFactory.newInstance();
+			final XPath Xpath = xpathFactory.newXPath();
+			final XPathExpression xPathExpression = Xpath.compile(expression);
+			final NodeList results = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
+
+			final int length = results.getLength();
+			for (int i = 0; i < length; i++) {
+				final Node item = results.item(i);
+				final Identity identity = new Identity();
+				identity.setDisplayName(
+						(String) xpathFactory.newXPath().compile(expressionDisplayName).evaluate(item, XPathConstants.STRING));
+				identity.setEmail((String) xpathFactory.newXPath().compile(expressionEmail).evaluate(item, XPathConstants.STRING));
+				identity.setUid((String) xpathFactory.newXPath().compile(expressionUid).evaluate(item, XPathConstants.STRING));
+				identities.add(identity);
+			}
+
+		} catch (final XPathExpressionException e) {
+
+			LOGGER.error("An error occured", e);
+		}
+
+		return identities;
 	}
 
 }
